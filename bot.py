@@ -2,6 +2,7 @@ import asyncio
 import os
 import json
 import socket
+import aiohttp
 from aiohttp import TCPConnector
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram import Bot, Dispatcher, types
@@ -218,13 +219,15 @@ async def help_command(message: types.Message):
 
 async def main():
     connector = TCPConnector(family=socket.AF_INET)
-    session = AiohttpSession(connector=connector)
+    client_session = aiohttp.ClientSession(connector=connector)
+    
+    session = AiohttpSession()
+    session._session = client_session
+    
     bot = Bot(token=TOKEN, session=session)
 
     print("Бот запущен!")
-
     await dp.start_polling(bot)
-
 
 if __name__ == "__main__":
     asyncio.run(main())
