@@ -23,9 +23,6 @@ if not TOKEN:
     raise ValueError("TOKEN табылмады! .env файлын тексер.")
 
 
-connector = TCPConnector(family=socket.AF_INET)
-session = AiohttpSession(connector=connector)
-bot = Bot(token=TOKEN, session=session)
 dp = Dispatcher()
 
 
@@ -62,7 +59,6 @@ def save_users():
         )
 
 
-# Бот қосылған кезде бұрынғы мәліметтерді жүктейміз
 users = load_users()
 
 
@@ -107,8 +103,6 @@ async def save_start(message: types.Message):
 
     user_id = str(message.from_user.id)
 
-    # Егер қолданушы бұрын сақталған болса,
-    # оның мәліметін өшірмейміз
     if user_id not in users:
         users[user_id] = {
             "name": None,
@@ -223,6 +217,9 @@ async def help_command(message: types.Message):
 # =========================
 
 async def main():
+    connector = TCPConnector(family=socket.AF_INET)
+    session = AiohttpSession(connector=connector)
+    bot = Bot(token=TOKEN, session=session)
 
     print("Бот запущен!")
 
@@ -231,4 +228,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
