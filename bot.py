@@ -1,7 +1,9 @@
 import asyncio
 import os
 import json
-
+import socket
+from aiohttp import TCPConnector
+from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
@@ -21,7 +23,9 @@ if not TOKEN:
     raise ValueError("TOKEN табылмады! .env файлын тексер.")
 
 
-bot = Bot(token=TOKEN)
+connector = TCPConnector(family=socket.AF_INET)
+session = AiohttpSession(connector=connector)
+bot = Bot(token=TOKEN, session=session)
 dp = Dispatcher()
 
 
